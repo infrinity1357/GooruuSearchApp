@@ -9,5 +9,6 @@
         public string Date { get; set; } = string.Empty;
         public string FullContent { get; set; } = string.Empty; // เพิ่มเนื้อหาเต็ม
         public string ImageUrl { get; set; } = "https://via.placeholder.com/800x400?text=Crime+Scene+Photo"; // รูปจำลอง
+        public string Type { get; set; } = "news";
     }
 }

@@ -5,85 +5,134 @@
 @inject MockSearchService SearchService
 @inject NavigationManager NavManager
 
-<PageTitle>@(article?.Title ?? "News Not Found") - DailyCrime</PageTitle>
+<PageTitle>@(article?.Title ?? "Page Not Found")</PageTitle>
 
 @if (article == null)
 {
     <div style="text-align:center; padding:50px;">
-        <h2>ไม่พบข่าวที่คุณต้องการ</h2>
-        <a href="/">กลับหน้าหลัก</a>
+        <h2>404 - ไม่พบหน้าที่ต้องการ</h2>
+        <a href="/">กลับไปค้นหาใหม่</a>
     </div>
 }
 else
 {
-    <div class="news-wrapper">
-        <nav class="news-navbar">
-            <div style="max-width:1100px; margin:0 auto; padding:0 20px; display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-size:1.5rem; font-weight:bold;">DAILY CRIME 🚨</div>
-                <div>
-                    <span style="margin-left:15px; cursor:pointer; opacity:0.8;">หน้าแรก</span>
-                    <span style="margin-left:15px; cursor:pointer; font-weight:bold; text-decoration:underline;">อาชญากรรม</span>
-                    <span style="margin-left:15px; cursor:pointer; opacity:0.8;">การเมือง</span>
+    // --- LAYOUT 1: ข่าวอาชญากรรม (News / Official) ---
+    // เน้นความน่าเชื่อถือ โทนสีแดง/น้ำเงิน
+    @if (article.Type == "news" || article.Type == "official")
+    {
+        <div class="news-wrapper theme-crime">
+            <nav class="news-navbar" style="background:#b71c1c;">
+                <div class="nav-content">
+                    <div class="brand">DAILY CRIME 🚨</div>
+                    <div class="menu">หน้าแรก | อาชญากรรม | การเมือง</div>
+                </div>
+            </nav>
+
+            <div class="news-container">
+                <main class="news-main">
+                    <h1 class="news-headline">@article.Title</h1>
+                    <div class="news-meta">โดย: ทีมข่าวอาชญากรรม | @article.Date</div>
+                    <img src="@article.ImageUrl" class="news-hero-img" />
+
+                    <div class="news-body">
+                        @((MarkupString)article.FullContent)
+                    </div>
+                </main>
+                <aside>
+                    <div class="ad-box">[Ad Space]</div>
+                    <div class="hot-news">
+                        <h4>ข่าวด่วนล่าสุด</h4>
+                        <ul><li>จับแล้ว! มือฆ่าหั่นศพ...</li><li>พบชิ้นส่วนมนุษย์...</li></ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    }
+
+    // --- LAYOUT 2: เว็บบอร์ด (Forum / Social) ---
+    // สไตล์ Pantip/Reddit พื้นหลังสีแปลกๆ มีคอมเมนต์เยอะๆ
+    else if (article.Type == "forum")
+    {
+        <div class="forum-wrapper" style="background:#3e3ea0; min-height:100vh; padding:20px;">
+            <div class="forum-container" style="background:white; max-width:900px; margin:0 auto; padding:30px; border-radius:10px;">
+                <div style="border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:20px;">
+                    <span style="background:#ffc107; padding:3px 10px; border-radius:4px; font-size:12px;">กระทู้แนะนำ</span>
+                    <h2 style="color:#2a2a72;">@article.Title</h2>
+                    <div style="font-size:12px; color:#888;">
+                        ตั้งกระทู้โดย: <span style="color:#0056b3;">สมาชิกหมายเลข 74921</span> | @article.Date
+                    </div>
+                </div>
+
+                <div class="forum-body" style="font-size:18px; line-height:1.6;">
+                    @((MarkupString)article.FullContent)
+                    <br /><br />
+                    <img src="@article.ImageUrl" style="max-width:100%; border:1px solid #ddd;" />
+                </div>
+
+                <div class="forum-comments" style="background:#f9f9f9; margin-top:40px; padding:20px;">
+                    <h3>ความคิดเห็นชาวเน็ต</h3>
+                    <div class="comment-item">
+                        <b>ความคิดเห็นที่ 1</b>
+                        <p>น่ากลัวมากครับ ขนลุกเลย!</p>
+                    </div>
+                    <div class="comment-item">
+                        <b>ความคิดเห็นที่ 2</b>
+                        <p>เรื่องแต่งหรือเปล่า? จขกท. มีหลักฐานมั้ย</p>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
+    }
 
-        <div class="news-container">
-            <main class="news-main">
-                <h1 class="news-headline">@article.Title</h1>
-
-                <div class="news-meta">
-                    <span>โดย: ทีมข่าวอาชญากรรม</span> |
-                    <span>@article.Date</span> |
-                    <span>อ่านแล้ว: 14,205 ครั้ง</span>
-                </div>
-
-                <img src="@article.ImageUrl" style="width:100%; height:auto; margin-bottom:20px; border-radius:4px;" />
-
-                <div class="news-body">
+    // --- LAYOUT 3: ข่าวซุบซิบ/ดารา (Gossip) ---
+    // สีชมพูฉูดฉาด ฟอนต์วัยรุ่น
+    else if (article.Type == "gossip")
+    {
+        <div class="gossip-wrapper" style="background:#fff0f5;">
+            <nav style="background:#ff69b4; color:white; padding:15px; text-align:center;">
+                <h1>GOSSIP STAR ✨ แฉยับวงการมายา</h1>
+            </nav>
+            <div style="max-width:800px; margin:20px auto; background:white; padding:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                <h1 style="color:#d63384; font-style:italic;">@article.Title</h1>
+                <img src="@article.ImageUrl" style="width:100%; border:5px solid #ff69b4;" />
+                <div style="font-size:20px; color:#555; margin-top:20px;">
                     @((MarkupString)article.FullContent)
                 </div>
-
-                <div class="comment-section">
-                    <h3>ความคิดเห็น (3)</h3>
-
-                    <div class="fake-comment">
-                        <div class="comment-user">Somsak_Detective</div>
-                        <div>ดูจากรูปการณ์แล้ว ไม่น่าใช่การปล้นธรรมดา น่าจะมีเงื่อนงำ</div>
-                        <div style="font-size:0.8rem; color:#888;">ตอบกลับ • ถูกใจ 45</div>
-                    </div>
-
-                    <div class="fake-comment">
-                        <div class="comment-user">Nong_Meow</div>
-                        <div>น่ากลัวมาก แถวบ้านเราเลย T_T</div>
-                        <div style="font-size:0.8rem; color:#888;">ตอบกลับ • ถูกใจ 12</div>
-                    </div>
-
-                    <div class="fake-comment">
-                        <div class="comment-user">Conan_Fanclub</div>
-                        <div>คนร้ายต้องเป็นคนใกล้ตัวแน่นอน ฟันธง!</div>
-                        <div style="font-size:0.8rem; color:#888;">ตอบกลับ • ถูกใจ 89</div>
-                    </div>
+                <div style="margin-top:30px; text-align:center;">
+                    <button style="background:#ff69b4; border:none; color:white; padding:10px 20px;">แชร์ข่าวนี้</button>
                 </div>
-            </main>
-
-            <aside>
-                <div style="background:white; padding:20px; margin-bottom:20px;">
-                    <h4>ข่าวที่น่าสนใจ</h4>
-                    <hr />
-                    <ul style="list-style:none; padding:0; line-height:1.6;">
-                        <li>🔴 <a href="#">จับแพะ? คดีปล้นร้านทอง...</a></li>
-                        <li>🔴 <a href="#">ลูกเนรคุณวางยาทั้งตระกูล...</a></li>
-                        <li>🔴 <a href="#">หวยงวดนี้ออกอะไร คลิก!</a></li>
-                    </ul>
-                </div>
-
-                <div style="background:#ddd; height:300px; display:flex; align-items:center; justify-content:center; color:#666;">
-                    [พื้นที่โฆษณา 300x300]
-                </div>
-            </aside>
+            </div>
         </div>
-    </div>
+    }
+
+    // --- LAYOUT 4: Dark Web (โทนดำเขียว Hacker) ---
+    else if (article.Type == "dark")
+    {
+        <div style="background:black; color:#0f0; min-height:100vh; font-family:'Courier New', monospace; padding:50px;">
+            <div style="max-width:800px; margin:0 auto; border:1px solid #0f0; padding:20px;">
+                <h2 style="border-bottom:1px solid #0f0; padding-bottom:10px;">TOP SECRET DOCUMENT</h2>
+                <p>SOURCE ID: @article.Id</p>
+                <p>DATE: @article.Date</p>
+                <br />
+                <h1 style="text-transform:uppercase;">@article.Title</h1>
+                <br />
+                <div style="opacity:0.8;">
+                    @((MarkupString)article.FullContent)
+                </div>
+                <br />
+                <p style="color:red; blink;">WARNING: THIS CONNECTION IS NOT SECURE.</p>
+            </div>
+        </div>
+    }
+
+    // Default Fallback (ถ้าไม่ระบุประเภท ใช้แบบ News ปกติ)
+    else
+    {
+        <div class="news-wrapper">
+            <h1>@article.Title</h1>
+            <div>@((MarkupString)article.FullContent)</div>
+        </div>
+    }
 }
 
 @code {
