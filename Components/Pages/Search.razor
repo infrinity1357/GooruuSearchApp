@@ -1,0 +1,79 @@
+﻿@page "/search"
+@using GooruuSearchApp.Models
+@using GooruuSearchApp.Services
+@inject MockSearchService SearchService
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+<PageTitle>@Query - Gooruu Search</PageTitle>
+
+<div style="border-bottom: 1px solid #ebebeb; padding: 20px; display:flex; align-items:center;">
+    <div class="gooruu-logo" style="font-size: 1.8rem; margin-right: 30px; cursor:pointer;" @onclick='() => NavManager.NavigateTo("/")'>
+        <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">r</span><span class="g-green">u</span><span class="g-red">u</span>
+    </div>
+
+    <div class="search-input-wrapper" style="margin-top:0; max-width: 600px;">
+        <input type="text" class="search-input" @bind="Query" @onkeyup="HandleEnter" />
+    </div>
+</div>
+
+<div style="border-bottom: 1px solid #ebebeb; padding-left: 160px; padding-bottom:10px; margin-top:10px;">
+    <span style="color:#1a0dab; border-bottom: 3px solid #1a0dab; padding-bottom:10px; font-weight:bold; margin-right:20px;">ทั้งหมด</span>
+    <span style="color:#5f6368; margin-right:20px;">ข่าวสาร</span>
+    <span style="color:#5f6368; margin-right:20px;">ค้นรูป</span>
+    <span style="color:#5f6368;">วิดีโอ</span>
+</div>
+
+<div class="result-container">
+    <div style="color:#70757a; font-size:14px; margin-bottom: 20px;">
+        ผลการค้นหาประมาณ @results.Count รายการ (0.42 วินาที)
+    </div>
+
+    @if (results.Any())
+    {
+        @foreach (var item in results)
+        {
+            <div class="result-item">
+                <div class="result-url">
+                    @item.Url
+                    <span style="color:#5f6368"> › news</span>
+                </div>
+                <div class="result-title">
+                    <a href="/news/@item.Id">@item.Title</a>
+                </div>
+                <div class="result-snippet">
+                    <span style="color:#70757a;">@item.Date — </span> @item.Snippet
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>ไม่พบผลลัพธ์สำหรับ "<b>@Query</b>"</p>
+        <p>ข้อแนะนำ:</p>
+        <ul>
+            <li>ลองใช้คำอื่นที่เกี่ยวข้องกับคดี</li>
+            <li>ตรวจสอบตัวสะกด</li>
+        </ul>
+    }
+</div>
+
+@code {
+    [SupplyParameterFromQuery(Name = "q")]
+    public string Query { get; set; } = "";
+
+    private List<SearchResult> results = new();
+
+    protected override void OnParametersSet()
+    {
+        // ดึงข้อมูลใหม่ทุกครั้งที่ URL เปลี่ยน (เช่น พิมพ์ค้นหาใหม่)
+        results = SearchService.Search(Query);
+    }
+
+    private void HandleEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(Query))
+        {
+            NavManager.NavigateTo($"/search?q={Uri.EscapeDataString(Query)}", forceLoad: false);
+        }
+    }
+}

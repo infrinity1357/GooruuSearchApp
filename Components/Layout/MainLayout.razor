@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<div class="blank-layout-container">
+    <main>
+        @Body
+    </main>
+</div>
+
+<style>
+    /* ตั้งค่าให้เต็มจอและพื้นหลังขาวสะอาด */
+    body, html {
+        height: 100%;
+        margin: 0;
+        background-color: #fff; /* พื้นขาวเหมือน Google */
+    }
+
+    .blank-layout-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
