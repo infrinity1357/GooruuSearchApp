@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GooruuSearchApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e3ecd89c29510be0481e07d9ae9809e123c34aa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f3d112590669cc85db4b468680ed17c473d9ffb")]
 [assembly: System.Reflection.AssemblyProductAttribute("GooruuSearchApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GooruuSearchApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

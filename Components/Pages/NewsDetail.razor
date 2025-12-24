@@ -1,10 +1,12 @@
 ﻿@page "/news/{Id}"
+
 @using GooruuSearchApp.Models
 @using GooruuSearchApp.Services
 @rendermode InteractiveServer
 @inject MockSearchService SearchService
 @inject NavigationManager NavManager
-
+@using GooruuSearchApp.Components.Layout
+@layout BlankLayout
 <PageTitle>@(article?.Title ?? "Page Not Found")</PageTitle>
 
 @if (article == null)

@@ -64,8 +64,6 @@ D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\8e398r3wk2-notf2xhcfb
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\x8830a30iw-h1s4sie4z3.gz
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\zq80zopv1e-63fj8s7r0e.gz
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\7ta6a7ncvt-0j3bgjxly4.gz
-D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\k7v3rzawhf-7v1qx9xoes.gz
-D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\fwqw5z5sin-7v1qx9xoes.gz
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\staticwebassets.build.json
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\staticwebassets.development.json
@@ -78,3 +76,6 @@ D:\Development\GooruuSearchApp\obj\Debug\net9.0\GooruuSearchApp.genruntimeconfig
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\ref\GooruuSearchApp.dll
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\GooruuSearchApp.sourcelink.json
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\mfjp78ioqb-cpxw3wc8fo.gz
+D:\Development\GooruuSearchApp\obj\Debug\net9.0\scopedcss\Components\Layout\BlankLayout.razor.rz.scp.css
+D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\k7v3rzawhf-5zil4lvu71.gz
+D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\fwqw5z5sin-5zil4lvu71.gz
