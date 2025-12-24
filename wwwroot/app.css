@@ -269,3 +269,318 @@ h1:focus {
     color: #9aa0a6;
     font-size: 18px;
 }
+
+
+
+
+/* =========================================
+   GLOBAL IMPORTS & RESET
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Chakra+Petch:wght@400;600&family=Mali:wght@500;700&display=swap');
+
+:root {
+    --crime-red: #c62828;
+    --dark-bg: #121212;
+    --paper-white: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #5f6368;
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased; /* ทำให้ฟอนต์คมชัดบน Mac/iOS */
+}
+
+/* =========================================
+   THEME 1: MODERN NEWS (ข่าวทางการ - สไตล์ NYT/BBC)
+   ========================================= */
+.theme-crime {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background-color: #f8f9fa;
+    color: var(--text-primary);
+    padding-bottom: 50px;
+}
+
+.news-navbar {
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-family: 'Playfair Display', serif; /* ฟอนต์หัวหนังสือพิมพ์ฝรั่ง */
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--crime-red);
+    letter-spacing: -0.5px;
+}
+
+.news-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    padding: 0 20px;
+}
+
+.news-main {
+    animation: fadeIn 0.8s ease;
+}
+
+.news-headline {
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    font-size: 2.5rem; /* หัวข้อใหญ่สะใจ */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.news-meta {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.news-hero-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* โค้งมนนิดๆ */
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.2); /* เงานุ่มลึก */
+}
+
+.news-body p {
+    font-size: 1.2rem; /* ตัวหนังสือใหญ่อ่านง่าย */
+    line-height: 1.8;
+    color: #2c2c2c;
+    margin-bottom: 25px;
+}
+
+/* Sidebar สวยๆ */
+.hot-news {
+    background: white;
+    padding: 25px;
+    border: 1px solid #eee;
+    border-top: 4px solid var(--crime-red);
+    position: sticky;
+    top: 100px; /* เลื่อนตามจอ */
+}
+
+/* =========================================
+   THEME 2: MODERN FORUM (เว็บบอร์ด - สไตล์ Reddit/Discord)
+   ========================================= */
+.forum-wrapper {
+    background: linear-gradient(135deg, #f0f2f5 0%, #eef2f8 100%);
+    min-height: 100vh;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    padding: 40px 0;
+}
+
+.forum-container {
+    background: white;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.1); /* เงาลอย */
+}
+
+.topic-tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.forum-title {
+    font-size: 2rem;
+    color: #1a1a1b;
+    margin: 10px 0;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #ff5722;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Comment Design แบบ Card */
+.comment-item {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+    .comment-item:hover {
+        background: white;
+        border-color: #dee2e6;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+/* =========================================
+   THEME 3: Y2K GOSSIP (ข่าวบันเทิง - สไตล์ Pop/Glassmorphism)
+   ========================================= */
+.gossip-wrapper {
+    background: radial-gradient(circle at top right, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    font-family: 'Mali', cursive;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* กล่องกระจก (Glassmorphism) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    text-align: center;
+}
+
+.gossip-title {
+    color: #d63384;
+    font-size: 2.5rem;
+    text-shadow: 3px 3px 0px white;
+    transform: rotate(-2deg);
+    margin-bottom: 30px;
+}
+
+.gossip-img {
+    border: 8px solid white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transform: rotate(2deg) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* เด้งดึ๋ง */
+    max-width: 100%;
+}
+
+    .gossip-img:hover {
+        transform: rotate(0deg) scale(1.05);
+    }
+
+/* =========================================
+   THEME 4: DARK WEB / HACKER (สไตล์ Matrix + Scanline)
+   ========================================= */
+.dark-theme-wrapper {
+    background-color: #0d0d0d;
+    min-height: 100vh;
+    padding: 50px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Chakra Petch', monospace; /* ฟอนต์แนว Sci-fi */
+}
+
+/* เส้นสแกนหน้าจอ CRT */
+.scanlines {
+    background: linear-gradient( to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2) );
+    background-size: 100% 4px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none; /* คลิกทะลุได้ */
+    z-index: 999;
+}
+
+.terminal-window {
+    border: 2px solid #00ff41;
+    background: rgba(0, 20, 0, 0.9);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    position: relative;
+}
+
+.terminal-header {
+    border-bottom: 1px solid #00ff41;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    color: #00ff41;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.hacker-text {
+    color: #00ff41;
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
+    line-height: 1.6;
+}
+
+.glitch-effect {
+    animation: glitch 1s linear infinite;
+}
+
+@keyframes glitch {
+    2%, 64% {
+        transform: translate(2px,0) skew(0deg);
+    }
+
+    4%, 60% {
+        transform: translate(-2px,0) skew(0deg);
+    }
+
+    62% {
+        transform: translate(0,0) skew(5deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
