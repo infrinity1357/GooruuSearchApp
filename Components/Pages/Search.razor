@@ -7,25 +7,43 @@
 <PageTitle>@Query - Gooruu Search</PageTitle>
 
 <div style="border-bottom: 1px solid #ebebeb; padding: 20px; display:flex; align-items:center;">
+
     <div class="gooruu-logo" style="font-size: 1.8rem; margin-right: 30px; cursor:pointer;" @onclick='() => NavManager.NavigateTo("/")'>
         <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">r</span><span class="g-green">u</span><span class="g-red">u</span>
     </div>
 
-    <div class="search-input-wrapper" style="margin-top:0; max-width: 600px;">
+    <div class="search-input-wrapper" style="margin-top:0; max-width: 600px; position: relative;">
 
         <input type="text"
                class="search-input"
-               @bind="Query"
+               value="@Query"
+               @oninput="HandleInput"
+               @onfocusout="HandleBlur"
                @onkeyup="HandleEnter"
-               style="padding-left: 45px;" /> <span class="material-icons"
-                                                    style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#5f6368; pointer-events:none; z-index:10;">
+               style="padding-left: 45px;" />
+
+        <span class="material-icons"
+              style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#5f6368; pointer-events:none; z-index:10;">
             search
         </span>
+
         @if (!string.IsNullOrEmpty(Query))
         {
             <span class="material-icons"
-                  style="position:absolute; right:15px; top:10px; color:#5f6368; cursor:pointer;"
+                  style="position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#5f6368; cursor:pointer; z-index:10;"
                   @onclick="ClearSearch">close</span>
+        }
+
+        @if (showSuggestions && suggestions.Any())
+        {
+            <div class="autocomplete-dropdown">
+                @foreach (var item in suggestions)
+                {
+                    <div class="autocomplete-item" @onmousedown="() => SelectSuggestion(item)">
+                        <span class="material-icons autocomplete-icon">schedule</span> <span>@item</span>
+                    </div>
+                }
+            </div>
         }
     </div>
 </div>
@@ -77,23 +95,66 @@
 
     private List<SearchResult> results = new();
 
+    // เพิ่มตัวแปรสำหรับ Dropdown
+    private List<string> suggestions = new();
+    private bool showSuggestions = false;
+
+    // ทำงานเมื่อโหลดหน้าเว็บครั้งแรก หรือ URL เปลี่ยน
     protected override void OnParametersSet()
     {
-        // ดึงข้อมูลใหม่ทุกครั้งที่ URL เปลี่ยน (เช่น พิมพ์ค้นหาใหม่)
         results = SearchService.Search(Query);
+        // เคลียร์ suggestions ออกทุกครั้งที่โหลดผลลัพธ์เสร็จ
+        showSuggestions = false;
     }
+
+    // --- Logic ส่วน Dropdown (ยกมาจาก Home.razor) ---
+
+    private void HandleInput(ChangeEventArgs e)
+    {
+        // อัปเดตค่า Query ตามสิ่งที่พิมพ์
+        Query = e.Value?.ToString() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(Query))
+        {
+            suggestions = SearchService.GetSuggestions(Query);
+            showSuggestions = suggestions.Any();
+        }
+        else
+        {
+            showSuggestions = false;
+        }
+    }
+
+    private void SelectSuggestion(string value)
+    {
+        Query = value;
+        showSuggestions = false;
+        // บังคับเปลี่ยน URL เพื่อโหลดผลลัพธ์ใหม่
+        NavManager.NavigateTo($"/search?q={Uri.EscapeDataString(Query)}");
+    }
+
+    private async Task HandleBlur()
+    {
+        await Task.Delay(200);
+        showSuggestions = false;
+    }
+
+    // --- Logic เดิม ---
 
     private void HandleEnter(KeyboardEventArgs e)
     {
         if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(Query))
         {
-            NavManager.NavigateTo($"/search?q={Uri.EscapeDataString(Query)}", forceLoad: false);
+            // บังคับเปลี่ยน URL (forceLoad: false คือไม่ต้องรีเฟรชทั้ง Browser แค่เปลี่ยน Route)
+            NavManager.NavigateTo($"/search?q={Uri.EscapeDataString(Query)}");
         }
     }
+
     private void ClearSearch()
     {
         Query = "";
-        results.Clear(); // หรือจะให้ Search("") เพื่อแสดงทั้งหมดก็ได้
-        StateHasChanged(); // สั่งให้หน้าจออัปเดตทันที
+        suggestions.Clear();
+        showSuggestions = false;
+        // results.Clear(); // ถ้าอยากให้ลบผลลัพธ์ด้วย
     }
 }
