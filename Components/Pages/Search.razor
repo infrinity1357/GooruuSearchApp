@@ -12,7 +12,21 @@
     </div>
 
     <div class="search-input-wrapper" style="margin-top:0; max-width: 600px;">
-        <input type="text" class="search-input" @bind="Query" @onkeyup="HandleEnter" />
+
+        <input type="text"
+               class="search-input"
+               @bind="Query"
+               @onkeyup="HandleEnter"
+               style="padding-left: 45px;" /> <span class="material-icons"
+                                                    style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#5f6368; pointer-events:none; z-index:10;">
+            search
+        </span>
+        @if (!string.IsNullOrEmpty(Query))
+        {
+            <span class="material-icons"
+                  style="position:absolute; right:15px; top:10px; color:#5f6368; cursor:pointer;"
+                  @onclick="ClearSearch">close</span>
+        }
     </div>
 </div>
 
@@ -75,5 +89,11 @@
         {
             NavManager.NavigateTo($"/search?q={Uri.EscapeDataString(Query)}", forceLoad: false);
         }
+    }
+    private void ClearSearch()
+    {
+        Query = "";
+        results.Clear(); // หรือจะให้ Search("") เพื่อแสดงทั้งหมดก็ได้
+        StateHasChanged(); // สั่งให้หน้าจออัปเดตทันที
     }
 }

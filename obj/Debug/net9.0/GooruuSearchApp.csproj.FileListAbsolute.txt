@@ -76,4 +76,5 @@ D:\Development\GooruuSearchApp\obj\Debug\net9.0\refint\GooruuSearchApp.dll
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\GooruuSearchApp.pdb
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\GooruuSearchApp.genruntimeconfig.cache
 D:\Development\GooruuSearchApp\obj\Debug\net9.0\ref\GooruuSearchApp.dll
-D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\mfjp78ioqb-hdzza1cjc3.gz
+D:\Development\GooruuSearchApp\obj\Debug\net9.0\GooruuSearchApp.sourcelink.json
+D:\Development\GooruuSearchApp\obj\Debug\net9.0\compressed\mfjp78ioqb-cpxw3wc8fo.gz

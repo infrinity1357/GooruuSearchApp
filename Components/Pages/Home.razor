@@ -7,45 +7,81 @@
 
 <div class="search-container">
     <div class="gooruu-logo">
-        <span class="g-blue">G</span>
-        <span class="g-red">o</span>
-        <span class="g-yellow">o</span>
-        <span class="g-blue">r</span>
-        <span class="g-green">u</span>
-        <span class="g-red">u</span>
+        <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">r</span><span class="g-green">u</span><span class="g-red">u</span>
     </div>
 
-    <div class="search-input-wrapper">
-        <span class="material-icons" style="position:absolute; left:15px; top:10px; color:#9aa0a6;">search</span>
+    <div class="search-input-wrapper" style="position:relative;">
+        <span class="material-icons" style="position:absolute; left:15px; top:12px; color:#9aa0a6;">search</span>
 
         <input type="text"
                class="search-input"
                placeholder="ค้นหาใน Gooruu หรือ พิมพ์ URL"
-               @bind="searchQuery"
+               value="@searchQuery"
+               @oninput="HandleInput"
+               @onfocusout="HandleBlur"
                @onkeyup="HandleEnter" />
+
+        @if (showSuggestions && suggestions.Any())
+        {
+            <div class="autocomplete-dropdown">
+                @foreach (var item in suggestions)
+                {
+                    <div class="autocomplete-item" @onmousedown="() => SelectSuggestion(item)">
+                        <span class="material-icons autocomplete-icon">schedule</span> <span>@item</span>
+                    </div>
+                }
+            </div>
+        }
     </div>
 
     <div style="margin-top: 30px;">
-        <button class="btn btn-light me-2" @onclick="DoSearch">
-            ค้นหาด้วย Gooruu
-        </button>
-
-        <button class="btn btn-light" @onclick="DoLuckySearch">
-            ดีใจจัง ค้นแล้วเจอเลย
-        </button>
+        <button class="btn btn-light me-2" @onclick="DoSearch">ค้นหาด้วย Gooruu</button>
+        <button class="btn btn-light" @onclick="DoLuckySearch">ดีใจจัง ค้นแล้วเจอเลย</button>
     </div>
 </div>
 
 @code {
     private string searchQuery = "";
+    private List<string> suggestions = new();
+    private bool showSuggestions = false;
 
-    // ฟังก์ชันกด Enter ในช่องค้นหา
+    // เมื่อมีการพิมพ์ (ทำงานทันทีทีละตัวอักษร)
+    private void HandleInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            suggestions = SearchService.GetSuggestions(searchQuery);
+            showSuggestions = suggestions.Any();
+        }
+        else
+        {
+            showSuggestions = false;
+        }
+    }
+
+    // เมื่อเลือกคำแนะนำจาก Dropdown
+    private void SelectSuggestion(string value)
+    {
+        searchQuery = value;
+        showSuggestions = false;
+        DoSearch(); // เลือกปุ๊บ ค้นหาเลย
+    }
+
+    // เมื่อเมาส์หลุดจากช่องค้นหา (ซ่อน Dropdown)
+    private async Task HandleBlur()
+    {
+        // ต้อง Delay นิดนึง ไม่งั้นมันจะซ่อนก่อนที่ Event Click จะทำงาน
+        await Task.Delay(200);
+        showSuggestions = false;
+    }
+
     private void HandleEnter(KeyboardEventArgs e)
     {
         if (e.Key == "Enter") DoSearch();
     }
 
-    // 1. ฟังก์ชันปุ่มค้นหาปกติ -> ไปหน้า Search
     private void DoSearch()
     {
         if (!string.IsNullOrWhiteSpace(searchQuery))
@@ -54,21 +90,15 @@
         }
     }
 
-    // 2. ฟังก์ชันปุ่มดีใจจัง -> ไปหน้าข่าวแรกทันที
     private void DoLuckySearch()
     {
-        // ค้นหาข้อมูลจาก Service ก่อน
         var results = SearchService.Search(searchQuery);
-
         if (results.Any())
         {
-            // ถ้าเจอข่าว ให้เปิดข่าวแรกสุดทันที (ข้ามหน้า Search Result)
-            var firstNewsId = results.First().Id;
-            NavManager.NavigateTo($"/news/{firstNewsId}");
+            NavManager.NavigateTo($"/news/{results.First().Id}");
         }
         else
         {
-            // ถ้าไม่เจออะไรเลย หรือไม่ได้พิมพ์ ให้สุ่มไปหน้า Search ปกติ
             DoSearch();
         }
     }

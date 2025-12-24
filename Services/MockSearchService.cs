@@ -89,7 +89,17 @@ namespace GooruuSearchApp.Services
                 }
             };
         }
+        // เพิ่มใน Class MockSearchService
+        public List<string> GetSuggestions(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return new List<string>();
 
+            return _allResults
+                .Where(x => x.Title.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.Title) // เอาแค่ชื่อเรื่อง
+                .Take(5) // เอามาแค่ 5 อันพอ เดี๋ยวรก
+                .ToList();
+        }
         // ฟังก์ชันค้นหา
         public List<SearchResult> Search(string query)
         {
