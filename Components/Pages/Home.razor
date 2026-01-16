@@ -3,6 +3,8 @@
 @rendermode InteractiveServer
 @using GooruuSearchApp.Services
 @inject MockSearchService SearchService
+@implements IDisposable
+
 <PageTitle>Gooruu</PageTitle>
 
 <div class="search-container">
@@ -16,18 +18,25 @@
         <input type="text"
                class="search-input"
                placeholder="ค้นหาใน Gooruu หรือ พิมพ์ URL"
-               value="@searchQuery"
-               @oninput="HandleInput"
-               @onfocusout="HandleBlur"
-               @onkeyup="HandleEnter" />
-        
+               @bind="searchQuery"
+               @bind:event="oninput"
+               @onkeyup="HandleKeyUp"
+               @onfocusout="HandleBlur" />
+
         @if (showSuggestions && suggestions.Any())
         {
             <div class="autocomplete-dropdown">
-                @foreach (var item in suggestions)
+                @for (int i = 0; i < suggestions.Count; i++)
                 {
-                    <div class="autocomplete-item" @onmousedown="() => SelectSuggestion(item)">
-                        <span class="material-icons autocomplete-icon">schedule</span> <span>@item</span>
+                    var index = i; // Local variable for closure
+                    var item = suggestions[i];
+                    var isActive = index == selectedIndex ? "active" : "";
+
+                    <div class="autocomplete-item @isActive"
+                         @onmousedown="() => SelectSuggestion(item)"
+                         @onmouseover="() => selectedIndex = index">
+                        <span class="material-icons autocomplete-icon">schedule</span>
+                        <span>@item</span>
                     </div>
                 }
             </div>
@@ -45,41 +54,91 @@
     private List<string> suggestions = new();
     private bool showSuggestions = false;
 
-    // เมื่อมีการพิมพ์ (ทำงานทันทีทีละตัวอักษร)
-    private void HandleInput(ChangeEventArgs e)
-    {
-        searchQuery = e.Value?.ToString() ?? "";
+    // ตัวแปรสำหรับ Debounce และ Keyboard Nav
+    private System.Timers.Timer? _debounceTimer;
+    private int selectedIndex = -1;
 
-        if (!string.IsNullOrWhiteSpace(searchQuery))
-        {
-            suggestions = SearchService.GetSuggestions(searchQuery);
-            showSuggestions = suggestions.Any();
-        }
-        else
-        {
-            showSuggestions = false;
-        }
+    protected override void OnInitialized()
+    {
+        // ตั้งค่า Timer รอ 300ms
+        _debounceTimer = new System.Timers.Timer(300);
+        _debounceTimer.AutoReset = false;
+        _debounceTimer.Elapsed += OnDebounceElapsed;
     }
 
-    // เมื่อเลือกคำแนะนำจาก Dropdown
+    // จัดการ KeyUp เพื่อทำ Debounce และ Navigation
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        // 1. Navigation (ไม่ส่ง request)
+        if (e.Key == "ArrowDown")
+        {
+            if (selectedIndex < suggestions.Count - 1) selectedIndex++;
+            return;
+        }
+        else if (e.Key == "ArrowUp")
+        {
+            if (selectedIndex > -1) selectedIndex--;
+            return;
+        }
+        else if (e.Key == "Enter")
+        {
+            if (selectedIndex >= 0 && selectedIndex < suggestions.Count)
+            {
+                SelectSuggestion(suggestions[selectedIndex]);
+            }
+            else
+            {
+                DoSearch();
+            }
+            return;
+        }
+        else if (e.Key == "Escape")
+        {
+            showSuggestions = false;
+            return;
+        }
+
+        // 2. Logic การค้นหา (Debounce)
+        // Reset timer ทุกครั้งที่พิมพ์
+        _debounceTimer?.Stop();
+        _debounceTimer?.Start();
+    }
+
+    // ทำงานเมื่อ user หยุดพิมพ์ครบ 300ms
+    private async void OnDebounceElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            suggestions.Clear();
+            showSuggestions = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        // ค้นหาจริง
+        var results = SearchService.GetSuggestions(searchQuery);
+
+        await InvokeAsync(() =>
+        {
+            suggestions = results;
+            showSuggestions = suggestions.Any();
+            selectedIndex = -1; // Reset selection
+            StateHasChanged(); // สั่ง Rerender UI
+        });
+    }
+
     private void SelectSuggestion(string value)
     {
         searchQuery = value;
         showSuggestions = false;
-        DoSearch(); // เลือกปุ๊บ ค้นหาเลย
+        DoSearch();
     }
 
-    // เมื่อเมาส์หลุดจากช่องค้นหา (ซ่อน Dropdown)
     private async Task HandleBlur()
     {
-        // ต้อง Delay นิดนึง ไม่งั้นมันจะซ่อนก่อนที่ Event Click จะทำงาน
+        // Delay เล็กน้อยเพื่อให้ event click ทำงานทัน
         await Task.Delay(200);
         showSuggestions = false;
-    }
-
-    private void HandleEnter(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter") DoSearch();
     }
 
     private void DoSearch()
@@ -102,4 +161,24 @@
             DoSearch();
         }
     }
+
+    public void Dispose()
+    {
+        _debounceTimer?.Dispose();
+    }
 }
+<style>
+    .autocomplete-item {
+        cursor: pointer;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+        /* เพิ่มส่วนนี้ */
+        .autocomplete-item.active,
+        .autocomplete-item:hover {
+            background-color: #f1f3f4; /* สีเทาอ่อนแบบ Google */
+            color: #202124;
+        }
+</style>

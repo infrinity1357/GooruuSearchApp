@@ -18,7 +18,115 @@
 }
 else
 {
-    // --- THEME 1: CRIME NEWS ---
+    @* ================================================================================= *@
+    @* 1. WEBPAGE 1: TIMELINE (The Chronical) *@
+    @* บริบท: เชนพิมพ์ "ข่าวฆาตกรรม" -> เจอหน้านี้หน้าแรก *@
+    @* ================================================================================= *@
+    @if (article.Id == "timeline-killer-20")
+    {
+        <div class="prop-timeline-wrapper" style="background-color: #f4f4f4; min-height: 100vh; padding-bottom: 50px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+            <header style="background: #1a1a1a; color: white; padding: 15px 0; border-bottom: 4px solid #d9534f;">
+                <div class="container" style="max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+                    <div style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">THE CHRONICAL</div>
+                    <div style="font-size: 0.8rem; color: #ccc;">THE TRUTH BETWEEN LINES.</div>
+                </div>
+            </header>
+
+            <main style="max-width: 800px; margin: 30px auto; background: white; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <div style="font-size: 0.8rem; color: #d9534f; margin-bottom: 10px; text-transform: uppercase; font-weight: bold;">
+                    CRIME > INVESTIGATIVE > SERIAL KILLER
+                </div>
+
+                <article class="article-content" style="line-height: 1.8; color: #333; font-size: 1.1rem;">
+                    @((MarkupString)article.FullContent)
+                </article>
+
+                <div style="margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; font-size: 0.9rem; color: #999;">
+                    © 2026 THE CHRONICAL - All rights reserved.
+                </div>
+            </main>
+        </div>
+    }
+
+    @* ================================================================================= *@
+    @* 2. WEBPAGE 2: THAI NEWS (น่าสนใจ.คอม) *@
+    @* บริบท: เชนพิมพ์ "ข่าวฆาตกรรมสัญลักษณ์ 20" (ข่าวแปล) *@
+    @* ================================================================================= *@
+    else if (article.Id == "news-thai-xx")
+    {
+        <div class="prop-thai-wrapper" style="background-color: #eef2f5; min-height: 100vh; font-family: 'Sarabun', 'Kanit', sans-serif;">
+            <header style="background: linear-gradient(90deg, #0056b3, #004494); color: white; padding: 10px 0;">
+                <div class="container" style="max-width: 960px; margin: 0 auto; padding: 0 15px; display: flex; align-items: center;">
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-right: 20px;">น่าสนใจ<span style="color:#ffc107">.คอม</span></div>
+                    <nav style="display: flex; gap: 15px; font-size: 0.9rem;">
+                        <span>หน้าแรก</span>
+                        <span>ข่าววันนี้</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">อาชญากรรม</span>
+                        <span>บันเทิง</span>
+                    </nav>
+                </div>
+            </header>
+
+            <main style="max-width: 960px; margin: 20px auto; display: flex; gap: 20px; padding: 0 15px;">
+                <div style="flex: 3; background: white; padding: 30px; border-radius: 4px; border-top: 5px solid #ffc107; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+
+                    <article class="thai-article-body" style="font-size: 1.15rem; line-height: 1.7; color: #222;">
+                        @((MarkupString)article.FullContent)
+                    </article>
+
+                    <div style="margin-top: 30px; display: flex; gap: 10px;">
+                        <button style="background: #3b5998; color: white; border: none; padding: 8px 15px; border-radius: 3px;">Facebook</button>
+                        <button style="background: #00aced; color: white; border: none; padding: 8px 15px; border-radius: 3px;">Twitter</button>
+                        <button style="background: #00c300; color: white; border: none; padding: 8px 15px; border-radius: 3px;">Line</button>
+                    </div>
+                </div>
+
+                <aside style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+                    <div style="background: white; padding: 15px; border-radius: 4px;">
+                        <h4 style="margin-top: 0; color: #0056b3;">ข่าวล่าสุด</h4>
+                        <ul style="padding-left: 20px; font-size: 0.9rem; color: #555;">
+                            <li style="margin-bottom: 10px;">ชาวบ้านตื่น! พบงูยักษ์คำชะโนด</li>
+                            <li style="margin-bottom: 10px;">ราคาทองวันนี้พุ่ง 300 บาท</li>
+                            <li>ปิดตำนานร้านดังย่านสยาม</li>
+                        </ul>
+                    </div>
+                </aside>
+            </main>
+        </div>
+    }
+
+    @* ================================================================================= *@
+    @* 3. WEBPAGE 3: ENGLISH NEWS (Texus Daily) *@
+    @* บริบท: เชนพิมพ์ "Murder XX 2005 New" (ข่าวต้นฉบับ) *@
+    @* ================================================================================= *@
+    else if (article.Id == "news-english-xx")
+    {
+        <div class="prop-eng-wrapper" style="background-color: #fff; min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif; color: #111;">
+            <header style="border-bottom: 1px solid #000; padding: 20px 0; text-align: center; margin-bottom: 30px;">
+                <div style="font-family: 'Times New Roman', serif; font-size: 3.5rem; font-weight: bold; letter-spacing: -1px; line-height: 1;">Texus Daily</div>
+                <div style="margin-top: 10px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 5px 0; font-family: sans-serif; font-size: 0.8rem; text-transform: uppercase;">
+                    Wednesday, December 21, 2005 | Vol. 124 No. 302 | Price $1.00
+                </div>
+            </header>
+
+            <main style="max-width: 700px; margin: 0 auto; padding: 0 20px;">
+
+                <article class="eng-article-body" style="font-size: 1.2rem; line-height: 1.6; text-align: justify;">
+                    @((MarkupString)article.FullContent)
+                </article>
+
+            </main>
+
+            <footer style="margin-top: 50px; border-top: 3px double #000; padding: 30px; text-align: center; font-family: sans-serif; font-size: 0.8rem; color: #666;">
+                Texus Daily Online Archive - 2005
+            </footer>
+        </div>
+    }
+    else
+    {
+        
+    
+        // --- THEME 1: CRIME NEWS ---
     @if (article.Type == "news" || article.Type == "official")
     {
         <div class="theme-crime">
@@ -160,6 +268,7 @@ else
                 </div>
             </div>
         </div>
+    }
     }
 }
 
