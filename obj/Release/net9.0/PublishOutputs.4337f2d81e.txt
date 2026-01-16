@@ -1,7 +1,0 @@
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\GooruuSearchApp.exe
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\appsettings.Development.json
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\appsettings.json
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\GooruuSearchApp.dll
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\GooruuSearchApp.deps.json
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\GooruuSearchApp.runtimeconfig.json
-D:\Development\GooruuSearchApp\obj\Release\net9.0\PubTmp\Out\GooruuSearchApp.pdb
